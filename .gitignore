@@ -1,0 +1,19 @@
+# SSH Keys
+*.pem
+*.ppk
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Merge Files
+*.bak
+
+#IntelliJ files
+**/*.iml
+**/.idea
+**/.gradle
+
+#macbook auto generated files
+*.DS_Store
