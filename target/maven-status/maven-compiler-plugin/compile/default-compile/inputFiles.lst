@@ -1,1 +1,14 @@
 /Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/CryptoWalletManagementApplication.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/dto/request/AddAssetRequest.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/dto/request/CreateWalletRequest.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/dto/request/SimulatePortfolioAssetInput.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/dto/request/SimulatePortfolioRequest.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/dto/response/AssetResponse.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/dto/response/SimulationResponse.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/dto/response/WalletResponse.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/entity/Asset.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/entity/PriceHistory.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/entity/User.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/entity/Wallet.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/mapper/AssetMapper.java
+/Users/pin0001n/<DEV>/crypto-wallet-management/src/main/java/com/spicep/cryptowallet/mapper/WalletMapper.java

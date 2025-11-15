@@ -34,7 +34,7 @@ TBA
 ## API Endpoints
 TBA
 ## Domain Model
-TBA
+![Domain Model](doc/er_model.drawio.svg)
 
 
 - **User**: One wallet per user (identified by unique email)

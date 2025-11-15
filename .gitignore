@@ -1,3 +1,8 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
 # SSH Keys
 *.pem
 *.ppk
@@ -11,9 +16,12 @@
 *.bak
 
 #IntelliJ files
-**/*.iml
-**/.idea
-**/.gradle
+.idea
+.idea/*
+*.iws
+*.iml
+*.ipr
 
-#macbook auto generated files
+#macbook auto generated files , env vars and others
 *.DS_Store
+.env

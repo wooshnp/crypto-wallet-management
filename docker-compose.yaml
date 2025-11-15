@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:17.6
+    ports:
+      - "5432:5432"
+    container_name: crypto-wallet-postgres
+    environment:
+      POSTGRES_DB: crypto_wallet
+      POSTGRES_USER: wallet_user
+      POSTGRES_PASSWORD: wallet_password
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wallet_user -d crypto_wallet"]
+      start_period: 5s
+      interval: 2s
+      timeout: 1s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local

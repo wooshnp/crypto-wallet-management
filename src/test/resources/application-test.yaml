@@ -1,0 +1,18 @@
+logging:
+  level:
+    com.spicep.cryptowallet: DEBUG
+    org.testcontainers: INFO
+
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:17.6:///testdb
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db_changelog.yaml
