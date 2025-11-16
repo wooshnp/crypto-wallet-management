@@ -1,17 +1,14 @@
 package com.spicep.cryptowallet.service;
 
-import com.spicep.cryptowallet.config.PriceUpdateProperties;
-import com.spicep.cryptowallet.entity.Asset;
 import com.spicep.cryptowallet.entity.PriceHistory;
 import com.spicep.cryptowallet.repository.AssetRepository;
 import com.spicep.cryptowallet.repository.PriceHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -24,16 +21,17 @@ public class PriceUpdateService {
     private final AssetRepository assetRepository;
     private final PriceHistoryRepository priceHistoryRepository;
     private final CoinCapService coinCapService;
-    private final PriceUpdateProperties properties;
-
     private final Executor priceUpdateExecutor;
+
+    @Value("${wallet.price-update.enable:true}")
+    private boolean priceUpdateEnabled;
 
     /**
      * Scheduled task that updates prices for all assets in the system
      */
     @Scheduled(fixedDelayString = "${wallet.price-update.interval:60000}")
     public void updatePrices() {
-        if (!properties.isEnable()) {
+        if (!priceUpdateEnabled) {
             return;
         }
 

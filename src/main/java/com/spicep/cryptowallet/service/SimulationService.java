@@ -6,6 +6,7 @@ import com.spicep.cryptowallet.dto.response.AssetPerformance;
 import com.spicep.cryptowallet.dto.response.SimulationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,9 @@ public class SimulationService {
 
     private final CoinCapService coinCapService;
 
+    @Value("${simulation.use-market-price.enable:false}")
+    private boolean useMarketPrice;
+
     /**
      * Simulates portfolio performance from a past date to present
      *
@@ -31,9 +35,9 @@ public class SimulationService {
      * @return Simulation result with total value and best/worst performing assets
      */
     public SimulationResponse simulatePortfolio(SimulatePortfolioRequest request) {
-        log.info("Simulating portfolio performance from date: {}", request.date());
+        log.info("Simulating portfolio performance from date: {} (useMarketPrice={})", request.date(), useMarketPrice);
 
-        // validate date is not in the future
+        // Validate date is not in the future
         if (request.date().isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Simulation date cannot be in the future");
         }
@@ -42,7 +46,25 @@ public class SimulationService {
         var totalCurrentValue = BigDecimal.ZERO;
 
         for (SimulatePortfolioAssetInput asset : request.assets()) {
-            AssetPerformance performance = calculateAssetPerformance(asset.symbol(), asset.quantity(), asset.value());
+            // If useMarketPrice=true, user should not provide value
+            if (useMarketPrice && asset.value() != null) {
+                throw new IllegalArgumentException(
+                        "Cannot provide value when simulation is configured to use market prices. " +
+                                "Either disable it or remove the value field."
+                );
+            }
+
+            // If useMarketPrice=false, user must provide value
+            if (!useMarketPrice && asset.value() == null) {
+                throw new IllegalArgumentException(
+                        "Must provide value when simulation is configured for manual pricing. " +
+                                "Either enable it or provide the value field."
+                );
+            }
+
+            AssetPerformance performance = calculateAssetPerformance(asset.symbol(), asset.quantity(),
+                    asset.value(), request.date()
+            );
 
             performances.put(asset.symbol(), performance);
             totalCurrentValue = totalCurrentValue.add(performance.currentValue());
@@ -67,20 +89,36 @@ public class SimulationService {
     }
 
     /**
-     * Calculate individual asset performance based on users original investment value
+     * Calculate individual asset performance based on configuration and user input
      *
-     * @param symbol Symbol of the asset (e.g., "BTC")
-     * @param quantity Quantity of the asset the user bought
-     * @param originalValue The total value the user paid for this asset
+     * @param symbol            Symbol of the asset (e.g. "btc")
+     * @param quantity          Quantity of the asset the user bought
+     * @param userProvidedValue The total value the user paid (only used when useMarketPrice=false)
+     * @param targetDate        Date provided by the user
      * @return AssetPerformance metrics showing current value and percentage change
      */
     private AssetPerformance calculateAssetPerformance(
             String symbol,
             BigDecimal quantity,
-            BigDecimal originalValue) {
+            BigDecimal userProvidedValue,
+            LocalDate targetDate) {
 
         var symbolUpper = symbol.toUpperCase();
-        var currentPrice = coinCapService.getCurrentPrice(symbolUpper);
+
+        // Determine baseline original value based on configuration
+        BigDecimal originalValue;
+        if (useMarketPrice) {
+            // Use CoinCap historical price for the target date as baseline
+            var historicalPrice = coinCapService.getHistoricalPrice(symbolUpper, targetDate);
+            originalValue = historicalPrice.multiply(quantity);
+        } else {
+            // Use user-provided value (already validated as non-null)
+            originalValue = userProvidedValue;
+        }
+
+        // If targetDate is today, get current price, otherwise historical
+        var currentPrice = targetDate.equals(LocalDate.now()) ? coinCapService.getCurrentPrice(symbolUpper)
+                : coinCapService.getHistoricalPrice(symbolUpper, targetDate);
 
         // Calculate current value: quantity * currentPrice
         var currentValue = currentPrice.multiply(quantity);

@@ -44,6 +44,10 @@ wallet:
     interval: 60000
     max-threads: 3
 
+simulation:
+  use-market-price:
+    enable: true
+
 coincap:
   api:
     base-url: https://rest.coincap.io/v3

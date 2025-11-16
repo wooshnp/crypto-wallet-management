@@ -13,7 +13,6 @@ public record SimulatePortfolioAssetInput(
         @DecimalMin(value = "0.0", inclusive = false, message = "Quantity must be greater than 0")
         BigDecimal quantity,
 
-        @NotNull(message = "Value is required")
-        @DecimalMin(value = "0.0",  inclusive = false, message = "Value must be greater than 0")
+        @DecimalMin(value = "0.0", inclusive = false, message = "Value must be greater than 0")
         BigDecimal value
 ) {}

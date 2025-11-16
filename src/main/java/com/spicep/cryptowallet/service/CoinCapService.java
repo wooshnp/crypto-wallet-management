@@ -25,11 +25,11 @@ public class CoinCapService {
     /**
      * Validates that an asset exists on CoinCap and returns its current price
      *
-     * @param symbol Asset symbol (e.g. "BTC")
+     * @param symbol        Asset symbol (e.g. "BTC")
      * @param providedPrice User-provided price for validation (optional)
      * @return Current price in USD from CoinCap
      * @throws AssetNotFoundException if symbol not found on CoinCap
-     * @throws CoinCapApiException if API call fails
+     * @throws CoinCapApiException    if API call fails
      */
     public BigDecimal validateAssetPrice(String symbol, BigDecimal providedPrice) {
         try {
@@ -69,10 +69,10 @@ public class CoinCapService {
      * Get historical price for a specific date
      *
      * @param symbol Asset symbol
-     * @param date Date to get price for
+     * @param date   Date to get price for
      * @return Price in USD on that date
      * @throws AssetNotFoundException if no price data found for that date
-     * @throws CoinCapApiException if API call fails
+     * @throws CoinCapApiException    if API call fails
      */
     public BigDecimal getHistoricalPrice(String symbol, LocalDate date) {
         var startOfDay = date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
