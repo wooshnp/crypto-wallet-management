@@ -42,18 +42,6 @@ public class CoinCapService {
 
             var actualPrice = new BigDecimal(response.data().priceUsd());
 
-            if (providedPrice != null) {
-                var tolerance = actualPrice.multiply(new BigDecimal("0.05")); // 5% tolerance
-                var difference = actualPrice.subtract(providedPrice).abs();
-
-                if (difference.compareTo(tolerance) > 0) {
-                    log.warn("Price mismatch for {}: provided={}, actual={}, difference={}%",
-                            symbol, providedPrice, actualPrice,
-                            difference.divide(actualPrice, 4, RoundingMode.HALF_DOWN)
-                                    .multiply(new BigDecimal("100")));
-                }
-            }
-
             log.debug("Validated asset {}: price={}", symbol, actualPrice);
             return actualPrice;
 
