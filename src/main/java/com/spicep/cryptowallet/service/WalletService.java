@@ -124,7 +124,10 @@ public class WalletService {
 
         log.info("Updated asset {} in wallet {}: new quantity {}", asset.getSymbol(), walletId, input.quantity());
 
-        return walletMapper.toResponse(wallet);
+        var updatedWallet = walletRepository.findById(walletId)
+                .orElseThrow(() -> WalletNotFoundException.notFound(walletId));
+
+        return walletMapper.toResponse(updatedWallet);
     }
 
 }
