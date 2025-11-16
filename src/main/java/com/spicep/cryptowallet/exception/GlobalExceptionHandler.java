@@ -74,6 +74,16 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(SimulationValidationException.class)
+    public ProblemDetail handleSimulationValidation(SimulationValidationException ex) {
+        log.warn("Simulation validation failed: {}", ex.getMessage());
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        problemDetail.setTitle("Invalid Simulation Request");
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
 
      //handles all other exceptions (500 Internal Server Error)
     @ExceptionHandler(Exception.class)

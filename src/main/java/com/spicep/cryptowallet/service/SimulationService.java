@@ -4,6 +4,7 @@ import com.spicep.cryptowallet.dto.request.SimulatePortfolioAssetInput;
 import com.spicep.cryptowallet.dto.request.SimulatePortfolioRequest;
 import com.spicep.cryptowallet.dto.response.AssetPerformance;
 import com.spicep.cryptowallet.dto.response.SimulationResponse;
+import com.spicep.cryptowallet.exception.SimulationValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +40,7 @@ public class SimulationService {
 
         // Validate date is not in the future
         if (request.date().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Simulation date cannot be in the future");
+            throw SimulationValidationException.futureDateNotAllowed();
         }
 
         Map<String, AssetPerformance> performances = new HashMap<>();
@@ -48,18 +49,12 @@ public class SimulationService {
         for (SimulatePortfolioAssetInput asset : request.assets()) {
             // If useMarketPrice=true, user should not provide value
             if (useMarketPrice && asset.value() != null) {
-                throw new IllegalArgumentException(
-                        "Cannot provide value when simulation is configured to use market prices. " +
-                                "Either disable it or remove the value field."
-                );
+                throw SimulationValidationException.valueProvidedWhenUsingMarketPrice();
             }
 
             // If useMarketPrice=false, user must provide value
             if (!useMarketPrice && asset.value() == null) {
-                throw new IllegalArgumentException(
-                        "Must provide value when simulation is configured for manual pricing. " +
-                                "Either enable it or provide the value field."
-                );
+                throw SimulationValidationException.valueMissingWhenNotUsingMarketPrice();
             }
 
             AssetPerformance performance = calculateAssetPerformance(asset.symbol(), asset.quantity(),
