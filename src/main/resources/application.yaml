@@ -2,7 +2,6 @@ logging:
   level:
     com.spicep.cryptowallet: DEBUG
     org.springframework.web: INFO
-    org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 
@@ -32,9 +31,12 @@ spring:
 
   cache:
     type: caffeine
-    cache-names: coincapIds
+    cache-names:
+      - coincapIds
+      - availableSymbols
+      - availableAssets
     caffeine:
-      spec: maximumSize=500, expireAfterAccess=1h
+      spec: maximumSize=500, expireAfterWrite=1h
 
 wallet:
   price-update:
@@ -44,8 +46,8 @@ wallet:
 
 coincap:
   api:
-    base-url: https://api.coincap.io/v2
-    key: # env key
+    base-url: https://rest.coincap.io/v3
+    key: ${COINCAP_API_KEY}
 
 management:
   endpoints:
@@ -55,3 +57,9 @@ management:
   endpoint:
     health:
       show-details: always
+
+springdoc:
+  show-actuator: true
+  paths-to-match:
+    - /api/**
+    - /actuator/caches/**

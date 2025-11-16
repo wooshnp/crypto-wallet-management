@@ -24,7 +24,7 @@ public class CoinCapResolver {
     @Cacheable(cacheNames = "coincapIds", key = "#symbol.toUpperCase()")
     public String resolveCoinCapId(String symbol) {
         try {
-            var resp = coinCapClient.getAssets(symbol, 5);
+            var resp = coinCapClient.getAssets(symbol, 100, 0);
             return resp.data().stream()
                     .filter(a -> symbol.equalsIgnoreCase(a.symbol()))
                     .map(CoinCapAsset::id)

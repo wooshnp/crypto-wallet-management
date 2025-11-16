@@ -38,5 +38,8 @@ public interface CoinCapClient {
     );
 
     @GetMapping("/assets")
-    CoinCapAssetsResponse getAssets(@RequestParam("search") String search, @RequestParam(value = "limit") int limit);
+    CoinCapAssetsResponse getAssets(
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "limit", defaultValue = "100") Integer limit,
+            @RequestParam(value = "offset", defaultValue = "0") Integer offset);
 }

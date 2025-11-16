@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/assets")
@@ -46,7 +47,12 @@ public class AssetController {
     })
     @GetMapping("/available")
     public ResponseEntity<List<CoinCapAsset>> getAvailableAssets(@RequestParam(required = false) String search,
-                                                                 @RequestParam(required = false) Integer limit) {
-        return ResponseEntity.ok(assetService.getAvailableAssets(search, limit));
+                                                                 @RequestParam(required = false) Integer limit,
+                                                                 @RequestParam(required = false) Integer offset) {
+
+        var size = Optional.ofNullable(limit).filter(l -> l > 0 && l <= 2000).orElse(100);
+        var off  = Optional.ofNullable(offset).filter(o -> o >= 0).orElse(0);
+
+        return ResponseEntity.ok(assetService.getAvailableAssets(search, size, off));
     }
 }

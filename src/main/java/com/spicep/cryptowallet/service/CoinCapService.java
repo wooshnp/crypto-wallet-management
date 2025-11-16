@@ -80,12 +80,8 @@ public class CoinCapService {
 
         try {
             var coinCapId = coinCapResolver.resolveCoinCapId(symbol);
-            var response = coinCapClient.getAssetHistory(
-                    coinCapId,
-                    CoinCapInterval.DAY_1.getValue(),
-                    startOfDay,
-                    endOfDay
-            );
+            var response = coinCapClient.getAssetHistory(coinCapId, CoinCapInterval.DAY_1.getValue(), startOfDay,
+                    endOfDay);
 
             if (response == null || response.data().isEmpty()) {
                 throw AssetNotFoundException.noHistoricalData(symbol, date);
