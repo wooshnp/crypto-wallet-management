@@ -24,7 +24,7 @@ public class AssetService {
     public List<String> getAvailableSymbols() {
         log.info("Fetching available symbols from CoinCap (cache miss)");
 
-        var response = coinCapClient.getAssets(null, 2000);
+        var response = coinCapClient.getAssets("", 2000);
 
         return response.data().stream().map(CoinCapAsset::symbol).distinct().sorted().toList();
     }
