@@ -1,6 +1,7 @@
 package com.spicep.cryptowallet.exception;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class AssetNotFoundException extends RuntimeException {
 
@@ -29,5 +30,14 @@ public class AssetNotFoundException extends RuntimeException {
         return new AssetNotFoundException(
                 "Asset not found or no historical data for: %s on %s".formatted(symbol, date),
                 cause);
+    }
+
+    public static AssetNotFoundException notFoundInWallet(UUID assetId, UUID walletId) {
+        return new AssetNotFoundException(
+                "Asset %s not found in wallet %s".formatted(assetId, walletId));
+    }
+
+    public static AssetNotFoundException notFound(UUID assetId) {
+        return new AssetNotFoundException("Asset not found: %s".formatted(assetId));
     }
 }
