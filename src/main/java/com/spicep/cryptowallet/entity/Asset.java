@@ -71,5 +71,5 @@ public class Asset {
     public BigDecimal getValue() {
         return quantity.multiply(currentPrice);
     }
-    
+
 }

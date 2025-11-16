@@ -57,15 +57,16 @@ public class SimulationService {
                 throw SimulationValidationException.valueMissingWhenNotUsingMarketPrice();
             }
 
-            AssetPerformance performance = calculateAssetPerformance(asset.symbol(), asset.quantity(),
+            var assetPerformance = calculateAssetPerformance(asset.symbol(), asset.quantity(),
                     asset.value(), request.date()
             );
 
-            performances.put(asset.symbol(), performance);
-            totalCurrentValue = totalCurrentValue.add(performance.currentValue());
+            performances.put(asset.symbol(), assetPerformance);
+            totalCurrentValue = totalCurrentValue.add(assetPerformance.currentValue());
 
             log.debug("Asset {} - Original: ${}, Current: ${}, Performance: {}%", asset.symbol(),
-                    performance.originalValue(), performance.currentValue(), performance.performancePercentage());
+                    assetPerformance.originalValue(), assetPerformance.currentValue(),
+                    assetPerformance.performancePercentage());
         }
 
         var bestAsset = performances.entrySet().stream()
@@ -107,13 +108,12 @@ public class SimulationService {
             var historicalPrice = coinCapService.getHistoricalPrice(symbolUpper, targetDate);
             originalValue = historicalPrice.multiply(quantity);
         } else {
-            // Use user-provided value (already validated as non-null)
+            // Use user-provided value
             originalValue = userProvidedValue;
         }
 
-        // If targetDate is today, get current price, otherwise historical
-        var currentPrice = targetDate.equals(LocalDate.now()) ? coinCapService.getCurrentPrice(symbolUpper)
-                : coinCapService.getHistoricalPrice(symbolUpper, targetDate);
+        // Current value is always based on today's market price
+        var currentPrice = coinCapService.getCurrentPrice(symbolUpper);
 
         // Calculate current value: quantity * currentPrice
         var currentValue = currentPrice.multiply(quantity);

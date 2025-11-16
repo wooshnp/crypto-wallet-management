@@ -8,6 +8,7 @@ import com.spicep.cryptowallet.entity.Asset;
 import com.spicep.cryptowallet.entity.PriceHistory;
 import com.spicep.cryptowallet.entity.User;
 import com.spicep.cryptowallet.entity.Wallet;
+import com.spicep.cryptowallet.exception.AssetAlreadyExistsException;
 import com.spicep.cryptowallet.exception.AssetNotFoundException;
 import com.spicep.cryptowallet.exception.WalletAlreadyExistsException;
 import com.spicep.cryptowallet.exception.WalletNotFoundException;
@@ -74,15 +75,7 @@ public class WalletService {
         var existingAssets = assetRepository.findByWalletIdAndSymbol(walletId, symbolUpper);
 
         if (!existingAssets.isEmpty()) {
-            // Update existing asset: add to quantity
-            var existingAsset = existingAssets.getFirst();
-            var newQuantity = existingAsset.getQuantity().add(input.quantity());
-            existingAsset.setQuantity(newQuantity);
-            existingAsset.updatePrice(currentPrice);
-            assetRepository.save(existingAsset);
-
-            log.info("Updated existing asset {} in wallet {}: added {} to quantity (new total: {})",
-                    symbolUpper, walletId, input.quantity(), newQuantity);
+            throw AssetAlreadyExistsException.forWallet(symbolUpper, walletId);
         } else {
             var asset = Asset.builder().symbol(symbolUpper).quantity(input.quantity()).acquisitionPrice(input.price())
                     .currentPrice(currentPrice).build();

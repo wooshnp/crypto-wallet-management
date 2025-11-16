@@ -47,6 +47,17 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(AssetAlreadyExistsException.class)
+    public ProblemDetail handleAssetAlreadyExists(AssetAlreadyExistsException ex) {
+        log.warn("Asset already exists: {}", ex.getMessage());
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT,ex.getMessage());
+        problemDetail.setTitle("Asset Already Exists");
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
     @ExceptionHandler(CoinCapApiException.class)
     public ProblemDetail handleCoinCapApiException(CoinCapApiException ex) {
         log.error("CoinCap API error: {}", ex.getMessage(), ex);
