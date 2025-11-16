@@ -33,7 +33,7 @@ public class WalletController {
             @ApiResponse(responseCode = "409", description = "Wallet already exists for this email")
     })
     @PostMapping
-    private ResponseEntity<WalletResponse> createWallet(@Valid @RequestBody CreateWalletRequest input) {
+    public ResponseEntity<WalletResponse> createWallet(@Valid @RequestBody CreateWalletRequest input) {
         return ResponseEntity.status(HttpStatus.CREATED).body(walletService.createWallet(input));
     }
 
