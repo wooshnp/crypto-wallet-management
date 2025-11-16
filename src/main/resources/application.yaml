@@ -30,14 +30,28 @@ spring:
     change-log: classpath:db/changelog/db_changelog.yaml
     enabled: true
 
-# TODO: Price Update Configuration
-#wallet:
-#  price-update:
-#    interval: #maybe milliseconds
-#    max-threads: #max n of updates 3
+  cache:
+    type: caffeine
+    cache-names: coincapIds
+    caffeine:
+      spec: maximumSize=500, expireAfterAccess=1h
 
+wallet:
+  price-update:
+    enable: true
+    interval: 60000
+    max-threads: 3
 
 coincap:
   api:
     base-url: https://api.coincap.io/v2
-    key: ${COINCAP_API_KEY}
+    key: # env key
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,caches
+  endpoint:
+    health:
+      show-details: always
