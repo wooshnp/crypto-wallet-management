@@ -46,6 +46,11 @@ public class Asset {
     @Column(name = "current_price", nullable = false, precision = 20, scale = 2)
     private BigDecimal currentPrice;
 
+    @NotNull
+    @Positive
+    @Column(name = "acquisition_price", nullable = false, precision = 20, scale = 2)
+    private BigDecimal acquisitionPrice;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -66,4 +71,5 @@ public class Asset {
     public BigDecimal getValue() {
         return quantity.multiply(currentPrice);
     }
+    
 }

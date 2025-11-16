@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface AssetMapper {
 
+    @Mapping(source = "acquisitionPrice", target = "acquisitionPrice")
     @Mapping(source = "currentPrice", target = "price")
     @Mapping(expression = "java(asset.getValue())", target = "value")
     AssetResponse toResponse(Asset asset);

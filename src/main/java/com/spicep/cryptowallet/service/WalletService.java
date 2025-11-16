@@ -84,9 +84,8 @@ public class WalletService {
             log.info("Updated existing asset {} in wallet {}: added {} to quantity (new total: {})",
                     symbolUpper, walletId, input.quantity(), newQuantity);
         } else {
-            // Create new asset
-            var asset = Asset.builder().symbol(symbolUpper).quantity(input.quantity()).currentPrice(currentPrice)
-                    .build();
+            var asset = Asset.builder().symbol(symbolUpper).quantity(input.quantity()).acquisitionPrice(input.price())
+                    .currentPrice(currentPrice).build();
             wallet.addAsset(asset);
             walletRepository.save(wallet);
 

@@ -25,3 +25,4 @@ target/
 #macbook auto generated files , env vars and others
 *.DS_Store
 .env
+
