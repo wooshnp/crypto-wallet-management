@@ -1,7 +1,14 @@
 package com.spicep.cryptowallet.exception;
 
-public class WalletAlreadyExistsException extends RuntimeException {
-    public WalletAlreadyExistsException(String email) {
-        super("Wallet already exists for email %s".formatted(email));
+import java.util.UUID;
+
+public class WalletNotFoundException extends RuntimeException {
+
+    private WalletNotFoundException(String message) {
+        super(message);
+    }
+
+    public static WalletNotFoundException notFound(UUID walletId) {
+        return new WalletNotFoundException("Wallet %s was not found".formatted(walletId));
     }
 }

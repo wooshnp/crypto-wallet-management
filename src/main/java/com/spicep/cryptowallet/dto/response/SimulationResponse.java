@@ -27,4 +27,5 @@ public class SimulationResponse {
 
     @JsonProperty("worst_performance")
     private BigDecimal worstPerformance;
+
 }
