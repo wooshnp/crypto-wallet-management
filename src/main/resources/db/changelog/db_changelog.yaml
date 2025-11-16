@@ -11,3 +11,6 @@ databaseChangeLog:
   - include:
       file: changes/004_add_price_history_table.sql
       relativeToChangelogFile: true
+  - include:
+      file: changes/005_fix_price_history_timestamp.sql
+      relativeToChangelogFile: true
