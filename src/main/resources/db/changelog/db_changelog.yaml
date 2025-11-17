@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: changes/001_add_users_table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/002_add_wallets_table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/003_add_assets_table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/004_add_price_history_table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/005_fix_price_history_timestamp.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/006_add_acquisition_price_to_assets.sql
+      relativeToChangelogFile: true

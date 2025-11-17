@@ -1,3 +1,69 @@
+logging:
+  level:
+    com.spicep.cryptowallet: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+
 spring:
   application:
     name: crypto-wallet-management
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/crypto_wallet
+    username: wallet_user
+    password: wallet_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: false
+
+  liquibase:
+    change-log: classpath:db/changelog/db_changelog.yaml
+    enabled: true
+
+  cache:
+    type: caffeine
+    cache-names:
+      - coincapIds
+      - availableSymbols
+      - availableAssets
+    caffeine:
+      spec: maximumSize=500, expireAfterWrite=1h
+
+wallet:
+  price-update:
+    enable: true
+    interval: 60000
+    max-threads: 3
+
+simulation:
+  use-market-price:
+    enable: true
+
+coincap:
+  api:
+    base-url: https://rest.coincap.io/v3
+    key: ${COINCAP_API_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,caches
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  show-actuator: true
+  paths-to-match:
+    - /api/**
+    - /actuator/caches/**
